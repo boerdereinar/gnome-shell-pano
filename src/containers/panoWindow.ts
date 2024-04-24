@@ -105,7 +105,7 @@ export class PanoWindow extends St.BoxLayout {
       this.add_style_class_name('vertical');
       this.set_width((this.settings.get_int('item-size') + 20) * scaleFactor);
     } else {
-      this.set_height((this.settings.get_int('item-size') + 90) * scaleFactor);
+      this.set_height((this.settings.get_int('item-size') + 20) * scaleFactor);
     }
   }
 

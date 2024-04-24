@@ -119,7 +119,7 @@ export class PanoItem extends St.BoxLayout {
       }
     });
 
-    this.header = new PanoItemHeader(ext, getPanoItemTypes(ext)[dbItem.itemType], dbItem.copyDate);
+    this.header = new PanoItemHeader(getPanoItemTypes(ext)[dbItem.itemType]);
     this.header.setFavorite(this.dbItem.isFavorite);
     this.header.connect('on-remove', () => {
       this.emit('on-remove', JSON.stringify(this.dbItem));
@@ -147,8 +147,15 @@ export class PanoItem extends St.BoxLayout {
       yExpand: true,
     });
 
-    this.add_child(this.header);
     this.add_child(this.body);
+    this.add_child(this.header);
+
+    this.header.add_constraint(
+      new Clutter.BindConstraint({
+        source: this,
+        coordinate: Clutter.BindCoordinate.Y,
+      }),
+    );
 
     const themeContext = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
 
@@ -175,8 +182,10 @@ export class PanoItem extends St.BoxLayout {
       this.set_y_align(Clutter.ActorAlign.FILL);
     }
     const { scaleFactor } = St.ThemeContext.get_for_stage(Shell.Global.get().get_stage());
-    this.body.set_height(this.settings.get_int('item-size') * scaleFactor - this.header.get_height());
+    this.body.set_height((this.settings.get_int('item-size') * 0.75 + 11) * scaleFactor);
     this.body.set_width(this.settings.get_int('item-size') * scaleFactor);
+
+    this.set_height(this.settings.get_int('item-size') * 0.75 * scaleFactor);
   }
 
   private setSelected(selected: boolean) {

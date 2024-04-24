@@ -32,6 +32,26 @@ export class FilePanoItem extends PanoItem {
       yAlign: Clutter.ActorAlign.FILL,
     });
 
+    if (this.operation === FileOperation.CUT) {
+      container.add_child(
+        new St.Icon({
+          iconName: 'edit-cut-symbolic',
+          xAlign: Clutter.ActorAlign.START,
+          iconSize: 30,
+          styleClass: 'file-icon',
+        }),
+      );
+    } else {
+      container.add_child(
+        new St.Icon({
+          gicon: Gio.icon_new_for_string(`${ext.path}/icons/hicolor/scalable/actions/paper-filled-symbolic.svg`),
+          xAlign: Clutter.ActorAlign.START,
+          iconSize: 30,
+          styleClass: 'file-icon',
+        }),
+      );
+    }
+
     this.fileList
       .map((f) => {
         const items = f.split('://').filter((c) => !!c);
@@ -46,14 +66,6 @@ export class FilePanoItem extends PanoItem {
           clipToAllocation: true,
           yAlign: Clutter.ActorAlign.FILL,
         });
-        bl.add_child(
-          new St.Icon({
-            iconName: this.operation === FileOperation.CUT ? 'edit-cut-symbolic' : 'edit-copy-symbolic',
-            xAlign: Clutter.ActorAlign.START,
-            iconSize: 14,
-            styleClass: 'file-icon',
-          }),
-        );
         const uriLabel = new St.Label({
           text: uri,
           styleClass: 'pano-item-body-file-name-label',
@@ -73,17 +85,10 @@ export class FilePanoItem extends PanoItem {
   }
 
   private setStyle() {
-    const headerBgColor = this.fileItemSettings.get_string('header-bg-color');
-    const headerColor = this.fileItemSettings.get_string('header-color');
-    const bodyBgColor = this.fileItemSettings.get_string('body-bg-color');
-    const bodyColor = this.fileItemSettings.get_string('body-color');
     const bodyFontFamily = this.fileItemSettings.get_string('body-font-family');
     const bodyFontSize = this.fileItemSettings.get_int('body-font-size');
 
-    this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-    this.body.set_style(
-      `background-color: ${bodyBgColor}; color: ${bodyColor}; font-family: ${bodyFontFamily}; font-size: ${bodyFontSize}px;`,
-    );
+    this.body.set_style(`font-family: ${bodyFontFamily}; font-size: ${bodyFontSize}px;`);
   }
 
   private setClipboardContent(): void {

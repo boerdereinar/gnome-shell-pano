@@ -18,16 +18,6 @@ export class ColorPanoItem extends PanoItem {
 
     this.colorItemSettings = this.settings.get_child('color-item');
 
-    const colorContainer = new St.BoxLayout({
-      vertical: false,
-      xExpand: true,
-      yExpand: true,
-      yAlign: Clutter.ActorAlign.FILL,
-      xAlign: Clutter.ActorAlign.FILL,
-      styleClass: 'color-container',
-      style: `background-color: ${this.dbItem.content};`,
-    });
-
     this.label = new St.Label({
       xAlign: Clutter.ActorAlign.CENTER,
       yAlign: Clutter.ActorAlign.CENTER,
@@ -37,9 +27,10 @@ export class ColorPanoItem extends PanoItem {
       styleClass: 'color-label',
     });
 
-    colorContainer.add_child(this.label);
+    this.body.style = `background-color: ${this.dbItem.content};`;
+    this.body.add_child(this.label);
 
-    colorContainer.add_constraint(
+    this.body.add_constraint(
       new Clutter.AlignConstraint({
         source: this,
         alignAxis: Clutter.AlignAxis.Y_AXIS,
@@ -47,21 +38,17 @@ export class ColorPanoItem extends PanoItem {
       }),
     );
 
-    this.body.add_child(colorContainer);
     this.connect('activated', this.setClipboardContent.bind(this));
     this.setStyle();
     this.colorItemSettings.connect('changed', this.setStyle.bind(this));
   }
 
   private setStyle() {
-    const headerBgColor = this.colorItemSettings.get_string('header-bg-color');
-    const headerColor = this.colorItemSettings.get_string('header-color');
     const metadataBgColor = this.colorItemSettings.get_string('metadata-bg-color');
     const metadataColor = this.colorItemSettings.get_string('metadata-color');
     const metadataFontFamily = this.colorItemSettings.get_string('metadata-font-family');
     const metadataFontSize = this.colorItemSettings.get_int('metadata-font-size');
 
-    this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
     this.label.set_style(
       `background-color: ${metadataBgColor}; color: ${metadataColor}; font-family: ${metadataFontFamily}; font-size: ${metadataFontSize}px;`,
     );

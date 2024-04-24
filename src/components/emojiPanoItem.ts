@@ -48,13 +48,8 @@ export class EmojiPanoItem extends PanoItem {
   }
 
   private setStyle() {
-    const headerBgColor = this.emojiItemSettings.get_string('header-bg-color');
-    const headerColor = this.emojiItemSettings.get_string('header-color');
-    const bodyBgColor = this.emojiItemSettings.get_string('body-bg-color');
     const emojiSize = this.emojiItemSettings.get_int('emoji-size');
 
-    this.header.set_style(`background-color: ${headerBgColor}; color: ${headerColor};`);
-    this.body.set_style(`background-color: ${bodyBgColor};`);
     this.label.set_style(`font-size: ${emojiSize}px;`);
   }
 
